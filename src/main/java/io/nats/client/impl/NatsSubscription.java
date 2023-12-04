@@ -168,6 +168,11 @@ class NatsSubscription extends NatsConsumer implements Subscription {
             this.connection.invalidate(this);
         }
 
+        if(getDeserializer() != null) {
+            byte[] data = getDeserializer().deserialize(subject, msg.data);
+            msg.data = data;
+        }
+
         return msg;
     }
 
