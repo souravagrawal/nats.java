@@ -16,24 +16,21 @@ package io.nats.client;
 
 import io.nats.client.impl.Headers;
 import java.io.Closeable;
-import java.nio.ByteBuffer;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
 
-public interface Deserializer extends Closeable {
+public interface Deserializer extends Closeable, Serializable {
 
     default void configure(Map<String, ?> configs, boolean isKey) {
     }
 
-    byte[] deserialize(String var1, byte[] var2);
+    byte[] decode(String var1, byte[] var2) throws IOException;
 
-    default byte[] deserialize(String topic, Headers headers, byte[] data) {
-        return this.deserialize(topic, data);
+    default byte[] decode(String topic, Headers headers, byte[] data) throws IOException {
+        return this.decode(topic, data);
     }
 
-    default byte[] deserialize(String topic, Headers headers, ByteBuffer data) {
-        return this.deserialize(topic, headers, data);
-    }
-
-    default void close() {
+    default void close() throws IOException{
     }
 }

@@ -14,35 +14,19 @@
 
 package io.nats.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.nats.client.impl.Headers;
 import java.io.Closeable;
+import java.io.IOException;
 import java.io.Serializable;
 
 public interface Serializer extends Closeable, Serializable{
 
-    /**
-     * Encode an object representing the message content into a byte array.
-     *
-     * @param message
-     *            the message object
-     * @return a byte array with the serialized content
-     * @throws RuntimeException
-     *             if the serialization fails
-     */
-    byte[] encode(String subject, byte[] message) throws JsonProcessingException;
+    byte[] encode(String subject, byte[] message) throws IOException;
 
-    /**
-     * Encode an object representing the message content into a byte array.
-     *
-     * @param message
-     *            the message object
-     * @return a byte array with the serialized content
-     * @throws RuntimeException
-     *             if the serialization fails
-     */
-    byte[] encode(String subject, Headers headers, byte[] message) throws JsonProcessingException;
+    default byte[] encode(String subject, Headers headers, byte[] message) throws IOException {
+        return encode(subject, message);
+    }
 
-    default void close() {
+    default void close() throws IOException{
     }
 }
